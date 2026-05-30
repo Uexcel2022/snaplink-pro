@@ -1,4 +1,4 @@
-package com.uexcel.snaplinkpro.analytics;
+package com.uexcel.snaplinkpro.analytics.entity;
 
 
 import com.uexcel.snaplinkpro.url.entity.Url;

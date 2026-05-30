@@ -22,7 +22,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)
             throws Exception {
-
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
@@ -36,7 +35,11 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/*"
                         ).permitAll()
-                        .requestMatchers("/api/urls").hasAnyRole("USER","ADMIN")
+
+                        .requestMatchers(
+                                "/api/urls/**",
+                                "/api/analytics/**"
+                        ).hasAnyRole("USER","ADMIN")
                 )
 
                 .sessionManagement(session -> session
