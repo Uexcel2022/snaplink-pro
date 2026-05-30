@@ -19,9 +19,6 @@ spring:
       hibernate:
         format_sql: true
 
-  redis:
-    host: localhost
-
   jackson:
     serialization:
       indent-output: true

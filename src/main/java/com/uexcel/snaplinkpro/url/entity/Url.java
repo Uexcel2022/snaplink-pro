@@ -1,6 +1,6 @@
-package com.uexcel.snaplinkpro.url;
+package com.uexcel.snaplinkpro.url.entity;
 
-import com.uexcel.snaplinkpro.auth.User;
+import com.uexcel.snaplinkpro.auth.entity.User;
 import com.uexcel.snaplinkpro.analytics.Analytics;
 import jakarta.persistence.*;
 import lombok.*;

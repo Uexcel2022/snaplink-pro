@@ -1,4 +1,4 @@
-package com.uexcel.snaplinkpro.dto;
+package com.uexcel.snaplinkpro.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

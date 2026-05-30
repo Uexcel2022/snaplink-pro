@@ -1,4 +1,4 @@
-package com.uexcel.snaplinkpro.dto;
+package com.uexcel.snaplinkpro.url.dto;
 
 import lombok.Builder;
 import lombok.Getter;

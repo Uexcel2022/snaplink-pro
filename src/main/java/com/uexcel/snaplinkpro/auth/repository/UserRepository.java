@@ -1,6 +1,6 @@
 package com.uexcel.snaplinkpro.auth.repository;
 
-import com.uexcel.snaplinkpro.auth.User;
+import com.uexcel.snaplinkpro.auth.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

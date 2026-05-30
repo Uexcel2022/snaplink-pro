@@ -1,4 +1,4 @@
-package com.uexcel.snaplinkpro.dto;
+package com.uexcel.snaplinkpro.url.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

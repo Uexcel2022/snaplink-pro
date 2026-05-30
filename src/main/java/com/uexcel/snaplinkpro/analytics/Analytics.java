@@ -1,7 +1,7 @@
 package com.uexcel.snaplinkpro.analytics;
 
 
-import com.uexcel.snaplinkpro.url.Url;
+import com.uexcel.snaplinkpro.url.entity.Url;
 import jakarta.persistence.*;
 import lombok.*;
 

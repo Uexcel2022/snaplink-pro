@@ -1,6 +1,5 @@
 package com.uexcel.snaplinkpro.security;
 
-import com.uexcel.snaplinkpro.jwtservice.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

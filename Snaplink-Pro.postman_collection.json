@@ -1,0 +1,176 @@
+{
+  "info": {
+    "name": "Snaplink Pro API",
+    "description": "Postman collection for Snaplink Pro URL Shortener",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "urlId",
+      "value": "1"
+    },
+    {
+      "key": "shortCode",
+      "value": "A7kP2xQ"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Udoka\",\n  \"email\": \"udoka@example.com\",\n  \"password\": \"password123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"udoka@example.com\",\n  \"password\": \"password123\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "URLs",
+      "item": [
+        {
+          "name": "Create Short URL",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/urls",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "urls"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"originalUrl\": \"https://spring.io/projects/spring-boot\",\n  \"customAlias\": \"springboot\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get My URLs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/urls",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "urls"]
+            }
+          }
+        },
+        {
+          "name": "Delete URL",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/urls/{{urlId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "urls", "{{urlId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Redirect",
+      "item": [
+        {
+          "name": "Open Short URL",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/{{shortCode}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{shortCode}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Get URL Analytics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/{{urlId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "{{urlId}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
