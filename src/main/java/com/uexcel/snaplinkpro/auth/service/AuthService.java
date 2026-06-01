@@ -6,8 +6,11 @@ import com.uexcel.snaplinkpro.auth.dto.RegisterRequest;
 import com.uexcel.snaplinkpro.auth.entity.Role;
 import com.uexcel.snaplinkpro.auth.entity.User;
 import com.uexcel.snaplinkpro.auth.repository.UserRepository;
+import com.uexcel.snaplinkpro.exception.EmailAlreadyExistsException;
+import com.uexcel.snaplinkpro.exception.UserNotFoundException;
 import com.uexcel.snaplinkpro.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,7 +31,7 @@ public class AuthService {
     public AuthResponse register(RegisterRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new EmailAlreadyExistsException("Email already exists",HttpStatus.CONFLICT);
         }
 
         User user = User.builder()
@@ -66,7 +69,7 @@ public class AuthService {
         );
 
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found", HttpStatus.NOT_FOUND));
 
         String token = jwtService.generateToken(
                 org.springframework.security.core.userdetails.User

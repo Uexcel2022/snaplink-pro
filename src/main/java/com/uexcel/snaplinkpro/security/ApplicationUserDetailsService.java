@@ -1,7 +1,9 @@
 package com.uexcel.snaplinkpro.security;
 
 import com.uexcel.snaplinkpro.auth.repository.UserRepository;
+import com.uexcel.snaplinkpro.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,6 @@ public class ApplicationUserDetailsService implements UserDetailsService {
                         .roles(user.getRole().name())
                         .build())
                 .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found"));
+                        new UserNotFoundException("User not found", HttpStatus.NOT_FOUND));
     }
 }

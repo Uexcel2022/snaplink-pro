@@ -1,6 +1,7 @@
 package com.uexcel.snaplinkpro.url.controller;
 
 import com.uexcel.snaplinkpro.analytics.event.UrlClickEvent;
+import com.uexcel.snaplinkpro.exception.UrlNotFoundException;
 import com.uexcel.snaplinkpro.ratelimit.RateLimitService;
 import com.uexcel.snaplinkpro.url.entity.Url;
 import com.uexcel.snaplinkpro.url.repository.UrlRepository;
@@ -40,7 +41,8 @@ public class RedirectController {
 
         if (originalUrl == null) {
             Url url = urlRepository.findByShortCode(shortCode)
-                    .orElseThrow(() -> new RuntimeException("Short URL not found"));
+                    .orElseThrow(() -> new UrlNotFoundException(
+                            "Short URL not found",HttpStatus.NOT_FOUND));
 
             originalUrl = url.getOriginalUrl();
 

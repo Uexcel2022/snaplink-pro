@@ -2,6 +2,10 @@ package com.uexcel.snaplinkpro.url.service;
 
 import com.uexcel.snaplinkpro.auth.entity.User;
 import com.uexcel.snaplinkpro.auth.repository.UserRepository;
+import com.uexcel.snaplinkpro.exception.AccessDeniedException;
+import com.uexcel.snaplinkpro.exception.AliasAlreadyExistsException;
+import com.uexcel.snaplinkpro.exception.UrlNotFoundException;
+import com.uexcel.snaplinkpro.exception.UserNotFoundException;
 import com.uexcel.snaplinkpro.url.dto.CreateUrlRequest;
 import com.uexcel.snaplinkpro.url.dto.UrlResponse;
 import com.uexcel.snaplinkpro.url.entity.Url;
@@ -10,6 +14,7 @@ import com.uexcel.snaplinkpro.util.Base62Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -63,7 +68,8 @@ public class UrlService {
                 url.setShortCode(shortCode);
                 urlRepository.save(url);
             } else {
-                throw new RuntimeException("Alias already exists");
+                throw new AliasAlreadyExistsException(
+                        "Alias already exists", HttpStatus.CONFLICT);
             }
         }
 
@@ -82,7 +88,8 @@ public class UrlService {
 
         User user = userRepository
                 .findByEmail(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() ->
+                        new UrlNotFoundException("User not found",HttpStatus.NOT_FOUND));
 
         return urlRepository.findByUserId(user.getId())
                 .stream()
@@ -100,13 +107,15 @@ public class UrlService {
 
         User user = userRepository
                 .findByEmail(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() ->
+                        new UserNotFoundException("User not found",HttpStatus.FOUND));
 
         Url url = urlRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("URL not found"));
+                .orElseThrow(() ->
+                        new UrlNotFoundException("URL not found",HttpStatus.NOT_FOUND));
 
         if (!url.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("Access denied");
+            throw new AccessDeniedException("Access denied",HttpStatus.UNAUTHORIZED);
         }
 
         urlRepository.delete(url);
