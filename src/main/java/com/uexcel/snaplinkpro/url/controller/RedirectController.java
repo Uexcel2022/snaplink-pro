@@ -1,6 +1,7 @@
 package com.uexcel.snaplinkpro.url.controller;
 
 import com.uexcel.snaplinkpro.analytics.event.UrlClickEvent;
+import com.uexcel.snaplinkpro.ratelimit.RateLimitService;
 import com.uexcel.snaplinkpro.url.entity.Url;
 import com.uexcel.snaplinkpro.url.repository.UrlRepository;
 import com.uexcel.snaplinkpro.url.service.UrlCacheService;
@@ -19,11 +20,20 @@ public class RedirectController {
     private final UrlRepository urlRepository;
     private final UrlCacheService urlCacheService;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final RateLimitService rateLimitService;
 
     @GetMapping("/{shortCode}")
     public ResponseEntity<Void> redirect(
             @PathVariable String shortCode,
             HttpServletRequest request) {
+
+        String ip = getClientIp(request);
+
+        if (!rateLimitService.isAllowed(ip)) {
+            return ResponseEntity
+                    .status(HttpStatus.TOO_MANY_REQUESTS)
+                    .build();
+        }
 
         // 1. Get URL from cache
         String originalUrl = urlCacheService.getCachedUrl(shortCode);
@@ -54,5 +64,15 @@ public class RedirectController {
         return ResponseEntity.status(HttpStatus.FOUND)
                 .location(URI.create(originalUrl))
                 .build();
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+
+        String forwarded = request.getHeader("X-Forwarded-For");
+
+        if (forwarded != null && !forwarded.isBlank()) {
+            return forwarded.split(",")[0];
+        }
+        return request.getRemoteAddr();
     }
 }
