@@ -1,6 +1,7 @@
 package com.uexcel.snaplinkpro.url.repository;
 
 import com.uexcel.snaplinkpro.url.entity.Url;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -23,4 +24,11 @@ public interface UrlRepository extends JpaRepository<Url, Long> {
     @Modifying
     @Query("UPDATE Url u SET u.clickCount = u.clickCount + :clicks WHERE u.id = :id")
     void incrementClickCount(@Param("id") Long id, @Param("clicks") Long clicks);
+
+    @Query("""
+       SELECT u
+       FROM Url u
+       ORDER BY u.clickCount DESC
+       """)
+    List<Url> findTopUrls(Pageable pageable);
 }

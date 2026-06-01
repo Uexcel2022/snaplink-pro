@@ -38,7 +38,8 @@ public class SecurityConfig {
 
                         .requestMatchers(
                                 "/api/urls/**",
-                                "/api/analytics/**"
+                                "/api/analytics/**",
+                                "/api/analytics/*/browsers"
                         ).hasAnyRole("USER","ADMIN")
                 )
 

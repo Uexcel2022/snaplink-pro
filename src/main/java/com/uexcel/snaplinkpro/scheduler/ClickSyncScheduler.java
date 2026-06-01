@@ -36,7 +36,6 @@ public class ClickSyncScheduler {
                     urlCacheService.resetClicks(url.getShortCode());
                 }
             }
-
         } finally {
             urlCacheService.releaseLock("click-sync");
         }

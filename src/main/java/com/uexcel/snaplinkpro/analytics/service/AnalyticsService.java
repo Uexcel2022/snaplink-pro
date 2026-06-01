@@ -1,21 +1,30 @@
 package com.uexcel.snaplinkpro.analytics.service;
 
 import com.uexcel.snaplinkpro.analytics.dto.AnalyticsResponse;
+import com.uexcel.snaplinkpro.analytics.dto.ClickTrendResponse;
+import com.uexcel.snaplinkpro.analytics.dto.TopUrlResponse;
 import com.uexcel.snaplinkpro.analytics.entity.Analytics;
 import com.uexcel.snaplinkpro.analytics.event.UrlClickEvent;
 import com.uexcel.snaplinkpro.analytics.repository.AnalyticsRepository;
 import com.uexcel.snaplinkpro.url.entity.Url;
 
+import com.uexcel.snaplinkpro.url.repository.UrlRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AnalyticsService {
 
     private final AnalyticsRepository analyticsRepository;
+    private final UrlRepository urlRepository;
 
     public void recordClick(UrlClickEvent event, Url url) {
 
@@ -30,6 +39,62 @@ public class AnalyticsService {
         analyticsRepository.save(analytics);
     }
 
+
+    public List<TopUrlResponse> getTopUrls(int limit) {
+
+        return urlRepository
+                .findTopUrls(PageRequest.of(0, limit))
+                .stream()
+                .map(url -> TopUrlResponse.builder()
+                        .shortCode(url.getShortCode())
+                        .originalUrl(url.getOriginalUrl())
+                        .clickCount(url.getClickCount())
+                        .build())
+                .toList();
+    }
+
+    public Map<String, Long> getBrowserStats(Long urlId) {
+
+        return analyticsRepository.findByUrlId(urlId)
+                .stream()
+                .collect(Collectors.groupingBy(
+                        Analytics::getBrowser,
+                        Collectors.counting()
+                ));
+    }
+
+    public Map<String, Long> getDeviceStats(Long urlId) {
+
+        return analyticsRepository.findByUrlId(urlId)
+                .stream()
+                .collect(Collectors.groupingBy(
+                        Analytics::getDevice,
+                        Collectors.counting()
+                ));
+    }
+
+    public List<ClickTrendResponse> getClickTrends(Long urlId) {
+
+        List<LocalDateTime> timestamps =
+                analyticsRepository.findAllCreatedAtByUrlId(urlId);
+
+        Map<LocalDate, Long> grouped = timestamps.stream()
+                .collect(Collectors.groupingBy(
+                        LocalDateTime::toLocalDate,
+                        Collectors.counting()
+                ));
+
+        return grouped.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(entry -> ClickTrendResponse.builder()
+                        .date(entry.getKey())
+                        .clicks(entry.getValue())
+                        .build())
+                .toList();
+    }
+
+
+
     private String extractBrowser(String userAgent) {
 
         if (userAgent == null) {
@@ -39,8 +104,7 @@ public class AnalyticsService {
         if (userAgent.contains("Chrome")) return "Chrome";
         if (userAgent.contains("Firefox")) return "Firefox";
         if (userAgent.contains("Safari")) return "Safari";
-        if (userAgent.contains("Edge")) return "Edge";
-
+        if (userAgent.contains("Microsoft Edge")) return "Edge";
         return "Other";
     }
 
