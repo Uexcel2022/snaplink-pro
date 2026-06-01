@@ -41,6 +41,8 @@ public class SecurityConfig {
                                 "/api/analytics/**",
                                 "/api/analytics/*/browsers"
                         ).hasAnyRole("USER","ADMIN")
+
+                        .anyRequest().authenticated()
                 )
 
                 .sessionManagement(session -> session
