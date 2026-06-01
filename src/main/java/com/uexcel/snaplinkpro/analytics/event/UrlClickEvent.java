@@ -1,6 +1,5 @@
 package com.uexcel.snaplinkpro.analytics.event;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

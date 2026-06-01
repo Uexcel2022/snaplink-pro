@@ -24,10 +24,6 @@ public class UrlClickEventListener {
                 .orElse(null);
 
         if (url == null) return;
-
-        // update click count asynchronously
-        url.setClickCount(url.getClickCount() + 1);
-        urlRepository.save(url);
         // store analytics
         analyticsService.recordClick(event, url);
     }

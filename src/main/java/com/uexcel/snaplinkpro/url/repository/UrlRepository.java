@@ -2,6 +2,9 @@ package com.uexcel.snaplinkpro.url.repository;
 
 import com.uexcel.snaplinkpro.url.entity.Url;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -16,4 +19,8 @@ public interface UrlRepository extends JpaRepository<Url, Long> {
     boolean existsByCustomAlias(String customAlias);
 
     List<Url> findByUserId(Long userId);
+
+    @Modifying
+    @Query("UPDATE Url u SET u.clickCount = u.clickCount + :clicks WHERE u.id = :id")
+    void incrementClickCount(@Param("id") Long id, @Param("clicks") Long clicks);
 }
