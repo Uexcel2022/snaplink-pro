@@ -9,6 +9,7 @@ import com.uexcel.snaplinkpro.url.repository.UrlRepository;
 import com.uexcel.snaplinkpro.util.Base62Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -26,44 +27,47 @@ public class UrlService {
     @Value("${app.base-url:http://localhost:8080}")
     private String baseUrl;
 
-    public UrlResponse createUrl(
-            CreateUrlRequest request,
-            Authentication authentication) {
+    public UrlResponse createUrl(CreateUrlRequest request,
+                                 Authentication authentication) {
 
         User user = userRepository
                 .findByEmail(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow();
 
         String shortCode;
 
         if (request.getCustomAlias() != null &&
                 !request.getCustomAlias().isBlank()) {
 
-            if (urlRepository.existsByCustomAlias(request.getCustomAlias())) {
-                throw new RuntimeException("Alias already exists");
-            }
-
             shortCode = request.getCustomAlias();
 
         } else {
-
-            do {
-                shortCode = base62Generator.generate();
-            } while (urlRepository.existsByShortCode(shortCode));
+            shortCode = base62Generator.generate();
         }
 
         Url url = Url.builder()
                 .originalUrl(request.getOriginalUrl())
                 .shortCode(shortCode)
                 .user(user)
+                .clickCount(0L)
                 .build();
 
-        urlRepository.save(url);
+        try {
+            urlRepository.save(url);
+        } catch (DataIntegrityViolationException ex) {
 
-        urlCacheService.cacheUrl(
-                url.getShortCode(),
-                url.getOriginalUrl()
-        );
+            // collision happened → retry once
+            if (request.getCustomAlias() == null) {
+                shortCode = base62Generator.generate();
+
+                url.setShortCode(shortCode);
+                urlRepository.save(url);
+            } else {
+                throw new RuntimeException("Alias already exists");
+            }
+        }
+
+        urlCacheService.cacheUrl(shortCode, url.getOriginalUrl());
 
         return UrlResponse.builder()
                 .id(url.getId())
