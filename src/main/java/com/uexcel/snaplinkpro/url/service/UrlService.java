@@ -21,6 +21,7 @@ public class UrlService {
     private final UrlRepository urlRepository;
     private final UserRepository userRepository;
     private final Base62Generator base62Generator;
+    private final UrlCacheService urlCacheService;
 
     @Value("${app.base-url:http://localhost:8080}")
     private String baseUrl;
@@ -58,6 +59,11 @@ public class UrlService {
                 .build();
 
         urlRepository.save(url);
+
+        urlCacheService.cacheUrl(
+                url.getShortCode(),
+                url.getOriginalUrl()
+        );
 
         return UrlResponse.builder()
                 .id(url.getId())

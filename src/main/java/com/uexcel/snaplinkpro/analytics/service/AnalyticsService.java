@@ -2,11 +2,14 @@ package com.uexcel.snaplinkpro.analytics.service;
 
 import com.uexcel.snaplinkpro.analytics.dto.AnalyticsResponse;
 import com.uexcel.snaplinkpro.analytics.entity.Analytics;
+import com.uexcel.snaplinkpro.analytics.event.UrlClickEvent;
 import com.uexcel.snaplinkpro.analytics.repository.AnalyticsRepository;
 import com.uexcel.snaplinkpro.url.entity.Url;
-import jakarta.servlet.http.HttpServletRequest;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -14,24 +17,20 @@ public class AnalyticsService {
 
     private final AnalyticsRepository analyticsRepository;
 
-    public void recordClick(
-            Url url,
-            HttpServletRequest request) {
+    public void recordClick(UrlClickEvent event, Url url) {
 
         Analytics analytics = Analytics.builder()
                 .url(url)
-                .browser(extractBrowser(request))
-                .device(extractDevice(request))
-                .ipAddress(extractIpAddress(request))
-                .referrer(request.getHeader("Referer"))
+                .browser(extractBrowser(event.getUserAgent()))
+                .device(extractDevice(event.getUserAgent()))
+                .ipAddress(event.getIp())
+                .referrer(event.getReferer())
                 .build();
 
         analyticsRepository.save(analytics);
     }
 
-    private String extractBrowser(HttpServletRequest request) {
-
-        String userAgent = request.getHeader("User-Agent");
+    private String extractBrowser(String userAgent) {
 
         if (userAgent == null) {
             return "Unknown";
@@ -45,9 +44,7 @@ public class AnalyticsService {
         return "Other";
     }
 
-    private String extractDevice(HttpServletRequest request) {
-
-        String userAgent = request.getHeader("User-Agent");
+    private String extractDevice(String userAgent) {
 
         if (userAgent == null) {
             return "Unknown";
@@ -60,21 +57,9 @@ public class AnalyticsService {
         return "Desktop";
     }
 
-    private String extractIpAddress(HttpServletRequest request) {
-
-        String forwarded = request.getHeader("X-Forwarded-For");
-
-        if (forwarded != null && !forwarded.isBlank()) {
-            return forwarded.split(",")[0];
-        }
-
-        return request.getRemoteAddr();
-    }
-
-
     public AnalyticsResponse getAnalytics(Url url) {
 
-        var analytics = analyticsRepository.findByUrl(url);
+        List<Analytics> analytics = analyticsRepository.findByUrl(url);
 
         long desktop = analytics.stream()
                 .filter(a -> "Desktop".equals(a.getDevice()))
