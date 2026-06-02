@@ -48,14 +48,6 @@ public class AnalyticsController {
         );
     }
 
-//    @GetMapping("/top-urls")
-//    public ResponseEntity<List<TopUrlResponse>> getTopUrls(
-//            @RequestParam(defaultValue = "10") int limit) {
-//        return ResponseEntity.ok(
-//                analyticsService.getTopUrls(limit)
-//        );
-//    }
-
     @GetMapping("/{urlId}/browsers")
     public ResponseEntity<Map<String, Long>> getBrowserStats(
             @PathVariable Long urlId, Authentication authentication) {
