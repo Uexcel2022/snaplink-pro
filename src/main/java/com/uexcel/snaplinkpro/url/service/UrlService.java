@@ -15,9 +15,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -29,6 +31,8 @@ public class UrlService {
     private final UserRepository userRepository;
     private final Base62Generator base62Generator;
     private final UrlCacheService urlCacheService;
+    private final RedisTemplate<String, String> redisTemplate;
+
 
     @Value("${app.base-url:http://localhost:8080}")
     private String baseUrl;
@@ -101,6 +105,7 @@ public class UrlService {
         }
 
         urlRepository.delete(url);
+        redisTemplate.delete("url:" + url.getShortCode());
     }
 
     public ApiResponse<List<UrlResponse>> getUserUrls(
