@@ -1,6 +1,7 @@
 package com.uexcel.snaplinkpro.url.repository;
 
 import com.uexcel.snaplinkpro.url.entity.Url;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -31,4 +32,8 @@ public interface UrlRepository extends JpaRepository<Url, Long> {
        ORDER BY u.clickCount DESC
        """)
     List<Url> findTopUrls(Pageable pageable);
+
+    Page<Url> findByUserEmail(String email, Pageable pageable);
 }
+
+

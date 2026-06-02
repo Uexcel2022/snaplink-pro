@@ -2,10 +2,9 @@ package com.uexcel.snaplinkpro.url.service;
 
 import com.uexcel.snaplinkpro.auth.entity.User;
 import com.uexcel.snaplinkpro.auth.repository.UserRepository;
-import com.uexcel.snaplinkpro.exception.AccessDeniedException;
-import com.uexcel.snaplinkpro.exception.AliasAlreadyExistsException;
-import com.uexcel.snaplinkpro.exception.UrlNotFoundException;
-import com.uexcel.snaplinkpro.exception.UserNotFoundException;
+import com.uexcel.snaplinkpro.dto.PaginationMeta;
+import com.uexcel.snaplinkpro.dto.ResponseUtil;
+import com.uexcel.snaplinkpro.exception.*;
 import com.uexcel.snaplinkpro.url.dto.CreateUrlRequest;
 import com.uexcel.snaplinkpro.url.dto.UrlResponse;
 import com.uexcel.snaplinkpro.url.entity.Url;
@@ -14,6 +13,8 @@ import com.uexcel.snaplinkpro.util.Base62Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -84,25 +85,6 @@ public class UrlService {
                 .build();
     }
 
-    public List<UrlResponse> getMyUrls(Authentication authentication) {
-
-        User user = userRepository
-                .findByEmail(authentication.getName())
-                .orElseThrow(() ->
-                        new UrlNotFoundException("User not found",HttpStatus.NOT_FOUND));
-
-        return urlRepository.findByUserId(user.getId())
-                .stream()
-                .map(url -> UrlResponse.builder()
-                        .id(url.getId())
-                        .originalUrl(url.getOriginalUrl())
-                        .shortCode(url.getShortCode())
-                        .shortUrl(baseUrl + "/" + url.getShortCode())
-                        .clickCount(url.getClickCount())
-                        .build())
-                .toList();
-    }
-
     public void deleteUrl(Long id, Authentication authentication) {
 
         User user = userRepository
@@ -119,5 +101,32 @@ public class UrlService {
         }
 
         urlRepository.delete(url);
+    }
+
+    public ApiResponse<List<UrlResponse>> getUserUrls(
+            String email,
+            Pageable pageable) {
+
+        Page<Url> page = urlRepository.findByUserEmail(email, pageable);
+
+        List<UrlResponse> urls = page.getContent()
+                .stream()
+                .map(url -> UrlResponse.builder()
+                        .id(url.getId())
+                        .originalUrl(url.getOriginalUrl())
+                        .shortCode(url.getShortCode())
+                        .shortUrl(baseUrl + "/" + url.getShortCode())
+                        .clickCount(url.getClickCount())
+                        .build())
+                .toList();
+
+        PaginationMeta meta = PaginationMeta.builder()
+                .page(page.getNumber())
+                .size(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .build();
+
+        return ResponseUtil.success(urls, meta);
     }
 }
