@@ -40,10 +40,10 @@ public class AnalyticsService {
     }
 
 
-    public List<TopUrlResponse> getTopUrls(int limit) {
+    public List<TopUrlResponse> getTopUrls(String email, int limit) {
 
         return urlRepository
-                .findTopUrls(PageRequest.of(0, limit))
+                .findTopUrlsByUserEmail(email, PageRequest.of(0, limit))
                 .stream()
                 .map(url -> TopUrlResponse.builder()
                         .shortCode(url.getShortCode())

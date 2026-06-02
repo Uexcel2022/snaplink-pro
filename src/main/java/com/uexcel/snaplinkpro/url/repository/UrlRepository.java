@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 @RequestMapping
@@ -34,6 +35,33 @@ public interface UrlRepository extends JpaRepository<Url, Long> {
     List<Url> findTopUrls(Pageable pageable);
 
     Page<Url> findByUserEmail(String email, Pageable pageable);
+
+
+    long countByUserEmail(String email);
+
+    long countByUserEmailAndExpiresAtBefore(
+            String email,
+            LocalDateTime now
+    );
+
+    @Query("""
+       SELECT COALESCE(SUM(u.clickCount), 0)
+       FROM Url u
+       WHERE u.user.email = :email
+       """)
+    long sumClicksByUserEmail(@Param("email") String email);
+
+    @Query("""
+       SELECT u
+       FROM Url u
+       WHERE u.user.email = :email
+       ORDER BY u.clickCount DESC
+       """)
+    List<Url> findTopUrlsByUserEmail(
+            @Param("email") String email,
+            Pageable pageable
+    );
+
 }
 
 
