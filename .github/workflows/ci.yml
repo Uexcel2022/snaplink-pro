@@ -27,4 +27,6 @@ jobs:
           cache: maven
 
       - name: Run Tests
+        env:
+          REDIS_PORT: 6379
         run: mvn clean test
