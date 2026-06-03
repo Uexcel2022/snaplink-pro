@@ -32,7 +32,7 @@ server:
   port: 8080
 
 jwt:
-  secret: ${JWT_SECRET:dev-secret-key-dev-secret-key-dev-secret-key-dev-secret-key}
+  secret: ${JWT_SECRET:dGVzdC1zZWNyZXQta2V5LXRlc3Qtc2VjcmV0LWtleS10ZXN0LXNlY3JldC1rZXktZm9yLWp3dA==}
   expiration: ${JWT_EXPIRATION:3600000}
 
 logging:
