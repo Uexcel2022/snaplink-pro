@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: snaplink-pro
+
+  profiles:
+    active: ${PROFILE:dev}
+
+  jackson:
+    serialization:
+      indent-output: true
+
+server:
+  port: ${SERVER_PORT:8080}
