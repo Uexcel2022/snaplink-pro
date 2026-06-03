@@ -8,3 +8,15 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+
+  data:
+    redis:
+      repositories:
+        enabled: false
+
+  cache:
+    type: none
+
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisReactiveAutoConfiguration

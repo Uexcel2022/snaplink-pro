@@ -101,7 +101,7 @@ public class UrlService {
                         new UrlNotFoundException("URL not found",HttpStatus.NOT_FOUND));
 
         if (!url.getUser().getId().equals(user.getId())) {
-            throw new AccessDeniedException("Access denied",HttpStatus.UNAUTHORIZED);
+            throw new ForbiddenException("Access denied",HttpStatus.FORBIDDEN);
         }
 
         urlRepository.delete(url);

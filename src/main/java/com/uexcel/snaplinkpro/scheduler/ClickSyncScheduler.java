@@ -4,12 +4,14 @@ import com.uexcel.snaplinkpro.url.entity.Url;
 import com.uexcel.snaplinkpro.url.repository.UrlRepository;
 import com.uexcel.snaplinkpro.url.service.UrlCacheService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@Profile("!test")
 @RequiredArgsConstructor
 public class ClickSyncScheduler {
     private final UrlRepository urlRepository;
