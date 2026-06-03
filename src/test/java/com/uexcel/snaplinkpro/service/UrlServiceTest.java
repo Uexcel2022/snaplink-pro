@@ -5,6 +5,7 @@ import com.uexcel.snaplinkpro.auth.repository.UserRepository;
 import com.uexcel.snaplinkpro.exception.AccessDeniedException;
 import com.uexcel.snaplinkpro.exception.AliasAlreadyExistsException;
 import com.uexcel.snaplinkpro.exception.ApiResponse;
+import com.uexcel.snaplinkpro.exception.ForbiddenException;
 import com.uexcel.snaplinkpro.url.dto.CreateUrlRequest;
 import com.uexcel.snaplinkpro.url.dto.UrlResponse;
 import com.uexcel.snaplinkpro.url.entity.Url;
@@ -196,7 +197,7 @@ class UrlServiceTest {
     }
 
     @Test
-    void shouldThrowAccessDeniedWhenUserDoesNotOwnUrl() {
+    void shouldThrowForbiddenWhenUserDoesNotOwnUrl() {
 
         User anotherUser = User.builder()
                 .id(99L)
@@ -218,7 +219,7 @@ class UrlServiceTest {
                 .thenReturn(Optional.of(url));
 
         assertThrows(
-                AccessDeniedException.class,
+                ForbiddenException.class,
                 () -> urlService.deleteUrl(1L, authentication)
         );
 

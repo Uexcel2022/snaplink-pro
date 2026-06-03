@@ -55,7 +55,7 @@ class UrlControllerIntegrationTest {
         when(rateLimitService.isAllowed(anyString())).thenReturn(true);
         RegisterRequest request = new RegisterRequest();
         request.setName("Test User");
-        request.setEmail("urluser@test.com");
+        request.setEmail("urluser" + System.nanoTime() +"@test.com");
         request.setPassword("password123");
 
         MvcResult result = mockMvc.perform(post("/api/auth/register")
