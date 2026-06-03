@@ -2,7 +2,7 @@ spring:
   application:
     name: snaplink-pro
   profiles:
-    active: ${PROFILE}
+    active: ${PROFILE:dev}
 
   datasource:
     url: ${DB_URL}
