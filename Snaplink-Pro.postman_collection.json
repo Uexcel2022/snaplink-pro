@@ -1,27 +1,11 @@
 {
   "info": {
+    "_postman_id": "cc63283b-3a3c-4899-af67-72f8ec942eb6",
     "name": "Snaplink Pro API",
     "description": "Postman collection for Snaplink Pro URL Shortener",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "31427331"
   },
-  "variable": [
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:8080"
-    },
-    {
-      "key": "token",
-      "value": ""
-    },
-    {
-      "key": "urlId",
-      "value": "1"
-    },
-    {
-      "key": "shortCode",
-      "value": "A7kP2xQ"
-    }
-  ],
   "item": [
     {
       "name": "Authentication",
@@ -36,19 +20,43 @@
                 "value": "application/json"
               }
             ],
-            "url": {
-              "raw": "{{baseUrl}}/api/auth/register",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "register"]
-            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Udoka\",\n  \"email\": \"udoka@example.com\",\n  \"password\": \"password123\"\n}"
+              "raw": "{\n  \"name\": \"Udoka\",\n  \"email\": \"udoka12@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();\r",
+                  "if (res.token) {\r",
+                  "  pm.collectionVariables.set('token', res.token);\r",
+                  "  console.log('Token saved:', res.token);\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -57,16 +65,23 @@
                 "value": "application/json"
               }
             ],
-            "url": {
-              "raw": "{{baseUrl}}/api/auth/login",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "login"]
-            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"udoka@example.com\",\n  \"password\": \"password123\"\n}"
+              "raw": "{\n  \"email\": \"udoka12@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -87,16 +102,22 @@
                 "value": "application/json"
               }
             ],
-            "url": {
-              "raw": "{{baseUrl}}/api/urls",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "urls"]
-            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"originalUrl\": \"https://spring.io/projects/spring-boot\",\n  \"customAlias\": \"springboot\"\n}"
+              "raw": "{\n  \"originalUrl\": \"https://www.google.com\",\n  \"customAlias\": \"google2\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/urls",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "urls"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get My URLs",
@@ -110,10 +131,16 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/urls",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "urls"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "urls"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Delete URL",
@@ -126,11 +153,18 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/api/urls/{{urlId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "urls", "{{urlId}}"]
+              "raw": "{{baseUrl}}/api/urls/12",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "urls",
+                "12"
+              ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -141,12 +175,18 @@
           "name": "Open Short URL",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
-              "raw": "{{baseUrl}}/{{shortCode}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["{{shortCode}}"]
+              "raw": "{{baseUrl}}/google2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "google2"
+              ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -164,13 +204,200 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/api/analytics/{{urlId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "analytics", "{{urlId}}"]
+              "raw": "{{baseUrl}}/api/analytics/13",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "analytics",
+                "13"
+              ]
             }
-          }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Top Url",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/top-urls",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "analytics",
+                "top-urls"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Top Browser",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/13/browsers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "analytics",
+                "13",
+                "browsers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Top Device",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/13/devices",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "analytics",
+                "13",
+                "devices"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "trends",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/13/trends",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "analytics",
+                "13",
+                "trends"
+              ]
+            }
+          },
+          "response": []
         }
       ]
+    },
+    {
+      "name": "Dashbaord",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"originalUrl\": \"https://www.google.com\",\n  \"customAlias\": \"googl7\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/dashboard/summary",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "dashboard",
+            "summary"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "urlId",
+      "value": "1"
+    },
+    {
+      "key": "shortCode",
+      "value": "A7kP2xQ"
     }
   ]
 }
