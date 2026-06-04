@@ -4,6 +4,7 @@ import com.uexcel.snaplinkpro.auth.repository.UserRepository;
 import com.uexcel.snaplinkpro.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ public class ApplicationUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email)
-            throws UsernameNotFoundException {
+            throws BadCredentialsException {
 
         return userRepository.findByEmail(email)
                 .map(user -> User.builder()
@@ -23,8 +24,8 @@ public class ApplicationUserDetailsService implements UserDetailsService {
                         .password(user.getPassword())
                         .roles(user.getRole().name())
                         .build())
-                .orElseThrow(() -> new UserNotFoundException(
-                        "Invalid credentials", HttpStatus.UNAUTHORIZED)
+                .orElseThrow(() -> new BadCredentialsException(
+                        "Invalid credentials")
                 );
     }
 }
