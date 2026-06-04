@@ -23,7 +23,8 @@ public class ApplicationUserDetailsService implements UserDetailsService {
                         .password(user.getPassword())
                         .roles(user.getRole().name())
                         .build())
-                .orElseThrow(() ->
-                        new UserNotFoundException("User not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(
+                        "Invalid credentials", HttpStatus.UNAUTHORIZED)
+                );
     }
 }

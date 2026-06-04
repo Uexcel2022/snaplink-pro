@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UrlService {
@@ -80,7 +79,6 @@ public class UrlService {
         }
 
         urlCacheService.cacheUrl(shortCode, url.getOriginalUrl());
-        log.info("Base URL = {}", baseUrl);
         return UrlResponse.builder()
                 .id(url.getId())
                 .originalUrl(url.getOriginalUrl())

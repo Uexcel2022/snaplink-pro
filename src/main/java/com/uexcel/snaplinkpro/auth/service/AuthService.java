@@ -69,7 +69,9 @@ public class AuthService {
         );
 
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UserNotFoundException("User not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(
+                        "User not found", HttpStatus.NOT_FOUND)
+                );
 
         String token = jwtService.generateToken(
                 org.springframework.security.core.userdetails.User
