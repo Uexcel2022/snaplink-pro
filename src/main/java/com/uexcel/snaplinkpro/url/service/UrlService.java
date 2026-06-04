@@ -11,6 +11,7 @@ import com.uexcel.snaplinkpro.url.entity.Url;
 import com.uexcel.snaplinkpro.url.repository.UrlRepository;
 import com.uexcel.snaplinkpro.util.Base62Generator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UrlService {
@@ -79,7 +80,7 @@ public class UrlService {
         }
 
         urlCacheService.cacheUrl(shortCode, url.getOriginalUrl());
-
+        log.info("Base URL = {}", baseUrl);
         return UrlResponse.builder()
                 .id(url.getId())
                 .originalUrl(url.getOriginalUrl())
