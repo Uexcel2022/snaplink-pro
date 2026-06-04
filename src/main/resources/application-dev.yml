@@ -25,3 +25,6 @@ jwt:
 logging:
   level:
     org.springframework.security: DEBUG
+
+app:
+  base-url: http://localhost:8080

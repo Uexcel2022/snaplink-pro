@@ -25,3 +25,6 @@ jwt:
 logging:
   level:
     org.springframework.security: INFO
+
+app:
+  base-url: ${APP_BASE_URL}
