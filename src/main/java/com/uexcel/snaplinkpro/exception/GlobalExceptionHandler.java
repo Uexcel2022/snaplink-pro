@@ -3,6 +3,9 @@ package com.uexcel.snaplinkpro.exception;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -69,6 +72,52 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .badRequest()
+                .body(response);
+    }
+
+    @ExceptionHandler({AuthenticationServiceException.class})
+    public ResponseEntity<ApiResponse<ApiError>> handleInvalidCredentials(
+            AuthenticationServiceException ex,
+            HttpServletRequest request
+    ) {
+        ApiError error = ApiError.builder()
+                .code("UNAUTHORIZED")
+                .message(ex.getMessage())
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .path(request.getRequestURI())
+                .build();
+
+        ApiResponse<ApiError> response = ApiResponse.<ApiError>builder()
+                .success(false)
+                .timestamp(LocalDateTime.now())
+                .data(error)
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(response);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<ApiError>> handleInternalServerError(
+            Exception ex,
+            HttpServletRequest request
+    ) {
+        ApiError error = ApiError.builder()
+                .code("INTERNAL_SERVER_ERROR")
+                .message("Something went wrong. Please try again later.")
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .path(request.getRequestURI())
+                .build();
+
+        ApiResponse<ApiError> response = ApiResponse.<ApiError>builder()
+                .success(false)
+                .timestamp(LocalDateTime.now())
+                .data(error)
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(response);
     }
 
