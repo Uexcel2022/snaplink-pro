@@ -1,4 +1,9 @@
-# SnapLink Pro - URL Shortener with Analytics
+# 🚀 SnapLink Pro - Production Ready URL Shortener with Analytics
+
+![Java](https://img.shields.io/badge/Java-21-orange)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-green)
+![Build](https://img.shields.io/badge/Build-Passing-brightgreen)
+![Coverage](https://img.shields.io/badge/Coverage-81%25-success)
 
 ## Overview
 
@@ -7,6 +12,47 @@ SnapLink Pro is a production-ready URL shortener REST API built with Spring Boot
 The application is designed with security, scalability, and maintainability in mind, featuring JWT authentication, Redis caching, rate limiting, analytics tracking, and comprehensive automated testing.
 
 ---
+
+## Project Highlights
+
+- JWT Authentication & Authorization
+- Redis Caching
+- URL Analytics & Dashboard
+- Rate Limiting
+- PostgreSQL Persistence
+- GitHub Actions CI
+- JaCoCo Code Coverage
+- 44 Automated Tests
+- 81% Instruction Coverage
+
+---
+
+## Repository
+
+[SnapLink Pro Repository](https://github.com/Uexcel2022/snaplink-pro)
+
+---
+
+## Screenshots
+
+
+### Swagger Documentation
+
+![Swagger UI](images/swagger-ui.png)
+
+
+
+### GitHub Actions Pipeline
+
+![GitHub Actions](images/github-actions.png)
+
+
+
+### JaCoCo Coverage Report
+
+![JaCoCo Coverage](images/jacoco-report.png)
+
+
 
 ## Features
 
@@ -90,26 +136,24 @@ The application is designed with security, scalability, and maintainability in m
 * Docker Compose
 
 ---
-
 ## Architecture
 
-SnapLink Pro follows a layered architecture:
-
+```text
 Controller Layer
-↓
+       ↓
 Service Layer
-↓
+       ↓
 Repository Layer
-↓
-Database
+       ↓
+PostgreSQL Database
 
 Supporting Components:
-
-* JWT Authentication
-* Redis Cache
-* Analytics Event Processing
-* Rate Limiting
-* Global Exception Handling
+- JWT Authentication
+- Redis Cache
+- Analytics Event Processing
+- Rate Limiting
+- Global Exception Handling
+```
 
 ---
 
@@ -117,37 +161,45 @@ Supporting Components:
 
 ### Authentication
 
-POST /api/auth/register
+`POST /api/auth/register`
 
-POST /api/auth/login
+`POST /api/auth/login`
 
 ### URLs
 
-POST /api/urls
+`POST /api/urls`
 
-GET /api/urls
+`GET /api/urls`
 
-DELETE /api/urls/{id}
+`DELETE /api/urls/{id}`
 
 ### Redirect
 
-GET /{shortCode}
+`GET /{shortCode}`
 
 ### Analytics
 
-GET /api/analytics/{urlId}
+`GET /api/analytics/{urlId}`
 
-GET /api/analytics/top-urls
+`GET /api/analytics/top-urls`
 
-GET /api/analytics/{urlId}/browsers
+`GET /api/analytics/{urlId}/browsers`
 
-GET /api/analytics/{urlId}/devices
+`GET /api/analytics/{urlId}/devices`
 
-GET /api/analytics/{urlId}/trends
+`GET /api/analytics/{urlId}/trends`
 
 ### Dashboard
 
-GET /api/dashboard/summary
+`GET /api/dashboard/summary`
+
+---
+
+## API Documentation
+
+Swagger UI is available when the application is running:
+
+`http://localhost:8080/swagger-ui/index.html`
 
 ---
 
@@ -155,9 +207,11 @@ GET /api/dashboard/summary
 
 ### Clone Repository
 
-git clone <repository-url>
+```bash
+git clone https://github.com/Uexcel2022/snaplink-pro.git
 
 cd snaplink-pro
+```
 
 ### Start Dependencies
 
@@ -169,7 +223,7 @@ mvn spring-boot:run
 
 ### Run Tests
 
-mvn clean test
+mvn clean verify
 
 ---
 
@@ -206,15 +260,70 @@ Completed Unit Tests:
 
 ---
 
+## CI/CD & Quality Assurance
+
+### Continuous Integration
+
+SnapLink Pro uses GitHub Actions to automatically:
+
+* Build the application
+* Run unit tests
+* Run integration tests
+* Verify build integrity
+* Generate JaCoCo coverage reports
+
+### Code Coverage
+
+JaCoCo Coverage Report:
+
+* Instruction Coverage: 81%
+* Classes Covered: 30/33
+* Automated Unit & Integration Testing
+
+### Latest Quality Metrics
+
+BUILD SUCCESS
+
+Tests Run: 44
+
+Failures: 0
+
+Errors: 0
+
+Skipped: 0
+
+GitHub Actions Status: Passing
+
+---
+
 ## Future Improvements
+
+### Deployment & DevOps
+
+* Cloud deployment (Render/AWS)
+* Continuous Deployment (CD)
+* Docker image publishing
+* Health monitoring
+
+### Product Enhancements
 
 * Custom domains
 * QR code generation
 * User roles and administration
 * Geo-location analytics
 * API rate limit dashboard
+
+### Testing
+
 * Testcontainers integration
-* GitHub Actions CI/CD pipeline
+* Increased branch coverage
+* Performance and load testing
+
+---
+
+## Live Demo
+
+Coming Soon (Render Deployment)
 
 ---
 
