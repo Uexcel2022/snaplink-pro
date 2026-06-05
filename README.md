@@ -53,7 +53,6 @@ The application is designed with security, scalability, and maintainability in m
 ![JaCoCo Coverage](images/jacoco-report.png)
 
 
-
 ## Features
 
 ### Authentication & Security
@@ -323,12 +322,18 @@ GitHub Actions Status: Passing
 
 ## Live Demo
 
+![GitHub Actions](images/render.png)
+
 API:
 https://snaplink-pro.onrender.com
 
 Swagger:
 https://snaplink-pro.onrender.com/swagger-ui/index.html
+
 ---
+
+
+
 
 ## Author
 
